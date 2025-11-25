@@ -1,0 +1,47 @@
+{
+    "homepage": {
+        "hero": {
+            "title": "A Collaborative Approach to International Expansion",
+            "subtitle": "Free Readiness Assessment",
+            "description": "See how ready you are to grow in international markets. Based in Singapore, serving clients across the Middle East, LATAM, and ASEAN."
+        },
+        "readiness_assessment": {
+            "title": "I want to...",
+            "fields": [
+                "Select Target Country/Market",
+                "Delivery Period"
+            ]
+        }
+    },
+    "company_info": {
+        "hq": "Singapore",
+        "regions": [
+            "Middle East",
+            "LATAM",
+            "ASEAN"
+        ],
+        "description": "XareTrust is a premier business growth management firm based in Singapore, dedicated to helping companies expand their footprint across dynamic markets in the Middle East, Latin America, and Southeast Asia."
+    },
+    "navigation": [
+        {
+            "label": "Home",
+            "path": "/"
+        },
+        {
+            "label": "About Us",
+            "path": "/about-us"
+        },
+        {
+            "label": "Solutions",
+            "path": "/solutions"
+        },
+        {
+            "label": "Prices",
+            "path": "/pricing"
+        },
+        {
+            "label": "Login",
+            "path": "/login"
+        }
+    ]
+}

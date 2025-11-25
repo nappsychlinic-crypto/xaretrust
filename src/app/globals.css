@@ -1,0 +1,127 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-outfit);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-border: var(--border);
+}
+
+:root {
+  /* Light Mode - Corporate Style */
+  --background: #ffffff;
+  --foreground: #1e293b;
+  /* slate-800 */
+
+  --primary: #1e40af;
+  /* blue-800 - Corporate Navy */
+  --primary-foreground: #ffffff;
+
+  --secondary: #475569;
+  /* slate-600 - Professional Gray */
+  --secondary-foreground: #ffffff;
+
+  --accent: #0369a1;
+  /* sky-700 - Professional Blue Accent */
+  --accent-foreground: #ffffff;
+
+  --muted: #f1f5f9;
+  /* slate-100 */
+  --muted-foreground: #64748b;
+  /* slate-500 */
+
+  --card: #ffffff;
+  --card-foreground: #1e293b;
+
+  --border: #e2e8f0;
+  /* slate-200 */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    /* Dark Mode - Corporate Style */
+    --background: #0f172a;
+    /* slate-900 */
+    --foreground: #f1f5f9;
+    /* slate-100 */
+
+    --primary: #3b82f6;
+    /* blue-500 - Corporate Navy (lighter for dark mode) */
+    --primary-foreground: #ffffff;
+
+    --secondary: #64748b;
+    /* slate-500 - Professional Gray */
+    --secondary-foreground: #ffffff;
+
+    --accent: #0ea5e9;
+    /* sky-500 - Professional Blue Accent */
+    --accent-foreground: #ffffff;
+
+    --muted: #1e293b;
+    /* slate-800 */
+    --muted-foreground: #94a3b8;
+    /* slate-400 */
+
+    --card: #1e293b;
+    /* slate-800 */
+    --card-foreground: #f1f5f9;
+
+    --border: #334155;
+    /* slate-700 */
+  }
+}
+
+.dark {
+  /* Dark Mode - Corporate Style */
+  --background: #0f172a;
+  /* slate-900 */
+  --foreground: #f1f5f9;
+  /* slate-100 */
+
+  --primary: #3b82f6;
+  /* blue-500 - Corporate Navy (lighter for dark mode) */
+  --primary-foreground: #ffffff;
+
+  --secondary: #64748b;
+  /* slate-500 - Professional Gray */
+  --secondary-foreground: #ffffff;
+
+  --accent: #0ea5e9;
+  /* sky-500 - Professional Blue Accent */
+  --accent-foreground: #ffffff;
+
+  --muted: #1e293b;
+  /* slate-800 */
+  --muted-foreground: #94a3b8;
+  /* slate-400 */
+
+  --card: #1e293b;
+  /* slate-800 */
+  --card-foreground: #f1f5f9;
+
+  --border: #334155;
+  /* slate-700 */
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), sans-serif;
+}
