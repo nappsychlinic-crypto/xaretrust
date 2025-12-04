@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/Button";
 import ReviewsPerPageSelector from "@/components/ReviewsPerPageSelector";
 import ReviewsSortSelector from "@/components/ReviewsSortSelector";
 import { ReviewActionButtons, SeeAllActivityButton } from "@/components/ReviewActions";
+import CompanyDescription from "@/components/CompanyDescription";
+import RatingBreakdown from "@/components/RatingBreakdown";
 
 export default async function CompanyPage({
     params,
@@ -42,10 +44,12 @@ export default async function CompanyPage({
                     </div>
 
                     <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
-                        <div className="w-32 h-32 bg-background rounded-lg border-2 border-border p-2 shrink-0 shadow-sm">
-                            <div className="w-full h-full bg-muted/20 flex items-center justify-center rounded text-4xl font-bold text-primary">
-                                {company.name.charAt(0)}
-                            </div>
+                        <div className="w-32 h-32 bg-white rounded-lg border-2 border-border p-2 shrink-0 shadow-sm">
+                            <img
+                                src={company.logo}
+                                alt={company.name}
+                                className="w-full h-full object-contain rounded"
+                            />
                         </div>
 
                         <div className="flex-1 text-center md:text-left">
@@ -93,67 +97,7 @@ export default async function CompanyPage({
                                 <CardTitle className="text-lg">Rating Breakdown</CardTitle>
                             </CardHeader>
                             <CardContent className="pt-6">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div className="space-y-1">
-                                        <div className="text-sm font-medium text-muted-foreground">Service Quality</div>
-                                        <div className="flex items-center gap-3">
-                                            <div className="flex text-green-500">
-                                                {[...Array(5)].map((_, i) => (
-                                                    <Star key={i} className={`h-4 w-4 ${i < Math.round(parseFloat(company.ratingBreakdown.serviceQuality)) ? "fill-current" : "text-gray-300"}`} />
-                                                ))}
-                                            </div>
-                                            <span className="text-lg font-bold">{company.ratingBreakdown.serviceQuality}/5</span>
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-1">
-                                        <div className="text-sm font-medium text-muted-foreground">Communication & Collaboration</div>
-                                        <div className="flex items-center gap-3">
-                                            <div className="flex text-green-500">
-                                                {[...Array(5)].map((_, i) => (
-                                                    <Star key={i} className={`h-4 w-4 ${i < Math.round(parseFloat(company.ratingBreakdown.communication)) ? "fill-current" : "text-gray-300"}`} />
-                                                ))}
-                                            </div>
-                                            <span className="text-lg font-bold">{company.ratingBreakdown.communication}/5</span>
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-1">
-                                        <div className="text-sm font-medium text-muted-foreground">Delivery & Timeliness</div>
-                                        <div className="flex items-center gap-3">
-                                            <div className="flex text-green-500">
-                                                {[...Array(5)].map((_, i) => (
-                                                    <Star key={i} className={`h-4 w-4 ${i < Math.round(parseFloat(company.ratingBreakdown.delivery)) ? "fill-current" : "text-gray-300"}`} />
-                                                ))}
-                                            </div>
-                                            <span className="text-lg font-bold">{company.ratingBreakdown.delivery}/5</span>
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-1">
-                                        <div className="text-sm font-medium text-muted-foreground">Value for Money</div>
-                                        <div className="flex items-center gap-3">
-                                            <div className="flex text-green-500">
-                                                {[...Array(5)].map((_, i) => (
-                                                    <Star key={i} className={`h-4 w-4 ${i < Math.round(parseFloat(company.ratingBreakdown.valueForMoney)) ? "fill-current" : "text-gray-300"}`} />
-                                                ))}
-                                            </div>
-                                            <span className="text-lg font-bold">{company.ratingBreakdown.valueForMoney}/5</span>
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-1">
-                                        <div className="text-sm font-medium text-muted-foreground">Recommendation Score</div>
-                                        <div className="flex items-center gap-3">
-                                            <div className="flex text-green-500">
-                                                {[...Array(5)].map((_, i) => (
-                                                    <Star key={i} className={`h-4 w-4 ${i < Math.round(parseFloat(company.ratingBreakdown.recommendation)) ? "fill-current" : "text-gray-300"}`} />
-                                                ))}
-                                            </div>
-                                            <span className="text-lg font-bold">{company.ratingBreakdown.recommendation}/5</span>
-                                        </div>
-                                    </div>
-                                </div>
+                                <RatingBreakdown companyId={company.companyId || "80ec2cbc-295e-4f4d-ba55-dd0064451a43"} />
                             </CardContent>
                         </Card>
 
@@ -163,10 +107,7 @@ export default async function CompanyPage({
                                 <CardTitle className="text-lg">Company Description</CardTitle>
                             </CardHeader>
                             <CardContent className="pt-6">
-                                <div
-                                    className="prose prose-sm max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-li:text-muted-foreground prose-strong:text-foreground"
-                                    dangerouslySetInnerHTML={{ __html: company.description }}
-                                />
+                                <CompanyDescription companyId={company.companyId || "80ec2cbc-295e-4f4d-ba55-dd0064451a43"} />
                             </CardContent>
                         </Card>
 

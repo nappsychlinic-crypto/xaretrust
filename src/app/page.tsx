@@ -5,6 +5,7 @@ import homeData from "@/data/home.json";
 import CompaniesCarousel from "@/components/CompaniesCarousel";
 import CategoriesCarousel from "@/components/CategoriesCarousel";
 import HomeHero from "@/components/HomeHero";
+import WhyXareTrust from "@/components/WhyXareTrust";
 import { Card, CardContent } from "@/components/ui/Card";
 
 export default function HomePage() {
@@ -23,8 +24,8 @@ export default function HomePage() {
       <section className="py-16 px-4 md:px-8 bg-muted/30">
         <div className="container mx-auto">
           <h2 className="text-2xl font-bold mb-8 text-center">Recent Reviews</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {homeData.recentReviews.map((review, idx) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {homeData.recentReviews.slice(0, 3).map((review, idx) => (
               <Card key={idx} className="bg-card border-border hover:shadow-lg transition-shadow">
                 <CardContent className="p-6">
                   <div className="flex items-center mb-4">
@@ -68,6 +69,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Why XareTrust Section */}
+      <WhyXareTrust />
     </main>
   );
 }

@@ -67,10 +67,12 @@ export default function CompanySearchBar() {
                                     onClick={() => setIsOpen(false)}
                                     className="flex items-center gap-4 px-4 py-3 hover:bg-muted/50 transition-colors"
                                 >
-                                    <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center shrink-0">
-                                        <span className="text-xl font-bold text-primary">
-                                            {company.name.charAt(0)}
-                                        </span>
+                                    <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center shrink-0 p-1 border border-border">
+                                        <img
+                                            src={company.logo}
+                                            alt={company.name}
+                                            className="w-full h-full object-contain"
+                                        />
                                     </div>
 
                                     <div className="flex-1 min-w-0">

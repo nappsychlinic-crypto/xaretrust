@@ -1,167 +1,72 @@
 {
   "hero": {
-    "title": "Discover Trusted Businesses Through Real Customer Reviews",
-    "subtitle": "Make confident decisions with verified reviews and trust scores from real customers across thousands of businesses.",
+    "title": "Convey Trust & Grow Sales",
+    "subtitle": "Collect reviews from your existing customers to convey trust to new potential ones.Track customer sentiment and address shortcomings wihtout delays!",
     "searchPlaceholder": "Search for a company or category..."
   },
   "categories": [
     {
-      "name": "Bank",
-      "icon": "Landmark",
-      "slug": "bank"
+      "name": "Legal",
+      "image": "/legal.jpeg",
+      "slug": "legal"
     },
     {
-      "name": "Travel Insurance",
-      "icon": "Plane",
-      "slug": "travel-insurance"
+      "name": "Brand",
+      "image": "/brand.jpeg",
+      "slug": "brand"
     },
     {
-      "name": "Car Dealer",
-      "icon": "Car",
-      "slug": "car-dealer"
+      "name": "Distributor",
+      "image": "/distributor.jpeg",
+      "slug": "distributor"
     },
     {
-      "name": "Furniture Store",
-      "icon": "Armchair",
-      "slug": "furniture-store"
+      "name": "Consulting",
+      "image": "/consulting.jpeg",
+      "slug": "consulting"
     },
     {
-      "name": "Jewelry Store",
-      "icon": "Gem",
-      "slug": "jewelry-store"
-    },
-    {
-      "name": "Clothing Store",
-      "icon": "Shirt",
-      "slug": "clothing-store"
-    },
-    {
-      "name": "Electronics",
-      "icon": "Cpu",
-      "slug": "electronics"
-    },
-    {
-      "name": "Fitness",
-      "icon": "Dumbbell",
-      "slug": "fitness"
-    },
-    {
-      "name": "Pet Store",
-      "icon": "Dog",
-      "slug": "pet-store"
-    },
-    {
-      "name": "Energy Supplier",
-      "icon": "Zap",
-      "slug": "energy-supplier"
-    },
-    {
-      "name": "Real Estate",
-      "icon": "Home",
-      "slug": "real-estate"
-    },
-    {
-      "name": "Insurance",
-      "icon": "Shield",
-      "slug": "insurance"
+      "name": "IT Solutions",
+      "image": "/it.jpeg",
+      "slug": "it-solutions"
     }
   ],
   "recentReviews": [
     {
-      "id": "rev-5p7n2mdkv",
-      "user": "User 915",
-      "rating": 4,
-      "title": "Terrible experience",
-      "content": "It's an average service, nothing special.It's an average service, nothing special.It's an average service, nothing special.",
-      "date": "2025-10-25T14:44:51.897Z",
-      "verified": false,
-      "company": "Dream Homes",
-      "companyDomain": "dreamhomes.com",
-      "companyLogo": "/logos/dreamhomes.com.png"
-    },
-    {
-      "id": "rev-qib6nd0j1",
-      "user": "User 867",
-      "rating": 3,
-      "title": "Best in class",
-      "content": "Everything was perfect.It's an average service, nothing special.It's an average service, nothing special.",
-      "date": "2025-10-13T01:17:01.704Z",
-      "verified": true,
-      "company": "Safe Guard",
-      "companyDomain": "safeguard.com",
-      "companyLogo": "/logos/safeguard.com.png"
-    },
-    {
-      "id": "rev-9sy4slrdu",
-      "user": "User 931",
-      "rating": 2,
-      "title": "Product arrived damaged",
-      "content": "The best quality I have seen in a long time.It's an average service, nothing special.It's an average service, nothing special.",
-      "date": "2025-10-10T09:09:02.907Z",
-      "verified": true,
-      "company": "Tech Haven",
-      "companyDomain": "techhaven.com",
-      "companyLogo": "/logos/techhaven.com.png"
-    },
-    {
-      "id": "rev-tyozqutzd",
-      "user": "User 861",
-      "rating": 1,
-      "title": "Worst ever",
-      "content": "The item arrived broken and they refused to refund me.It's an average service, nothing special.It's an average service, nothing special.",
-      "date": "2025-10-04T20:56:04.000Z",
-      "verified": true,
-      "company": "Pet Paradise",
-      "companyDomain": "petparadise.com",
-      "companyLogo": "/logos/petparadise.com.png"
-    },
-    {
-      "id": "rev-bml0v145s",
-      "user": "User 383",
-      "rating": 4,
-      "title": "Customer support was helpful",
-      "content": "I had a wonderful experience with this company. The staff was friendly and helpful.It's an average service, nothing special.It's an average service, nothing special.",
-      "date": "2025-10-03T12:19:21.286Z",
-      "verified": true,
-      "company": "Health Plus",
-      "companyDomain": "healthplus.com",
-      "companyLogo": "/logos/healthplus.com.png"
-    },
-    {
-      "id": "rev-caugnhk33",
-      "user": "User 299",
-      "rating": 3,
-      "title": "Terrible experience",
-      "content": "Good value for the price.It's an average service, nothing special.It's an average service, nothing special. It's an average service, nothing special.",
-      "date": "2025-09-19T04:06:25.647Z",
-      "verified": true,
-      "company": "Sparkle Gems",
-      "companyDomain": "sparklegems.com",
-      "companyLogo": "/logos/sparklegems.com.png"
-    },
-    {
-      "id": "rev-6bsw9f6ww",
-      "user": "User 614",
+      "id": "rev-sekim-001",
+      "user": "Koldo Iturriagagoitia",
       "rating": 5,
-      "title": "Worst ever",
-      "content": "I will never use this service again. They were rude and unhelpful.It's an average service, nothing special.It's an average service, nothing special. It's an average service, nothing special.",
-      "date": "2025-09-05T04:44:35.708Z",
-      "verified": false,
-      "company": "Travel Defenders",
-      "companyDomain": "traveldefenders.com",
-      "companyLogo": "/logos/traveldefenders.com.png"
+      "title": "Regular Partner with Excellent Results",
+      "content": "Eckoing has been a regular partner of SEKIM International several years. Whenever we have a project in Asia we count on them for their experience, their professionalism, and the confidence that the work will be well done. And our clients are delighted!",
+      "date": "2024-11-15T10:30:00.000Z",
+      "verified": true,
+      "company": "SEKIM International",
+      "companyDomain": "sekiminternational.com",
+      "companyLogo": "/logos/sekim.png"
     },
     {
-      "id": "rev-46exidk7b",
-      "user": "User 242",
-      "rating": 3,
-      "title": "Worst ever",
-      "content": "Good value for the price.It's an average service, nothing special.It's an average service, nothing special. It's an average service, nothing special.",
-      "date": "2025-09-04T20:35:39.692Z",
+      "id": "rev-sekim-002",
+      "user": "Daniele Menin",
+      "rating": 5,
+      "title": "Hard Work and Professionalism",
+      "content": "We have been working with SEKIM since 2019 and thanks to their hard work, professionalism and determination; we have been able to position our products at premium customers in many ASEAN countries.",
+      "date": "2024-10-28T14:20:00.000Z",
       "verified": true,
-      "company": "Fashion Hub",
-      "companyDomain": "fashionhub.com",
-      "companyLogo": "/logos/fashionhub.com.png"
+      "company": "SEKIM International",
+      "companyDomain": "sekiminternational.com",
+      "companyLogo": "/logos/sekim.png"
+    },
+    {
+      "id": "rev-sekim-003",
+      "user": "Iker Yeregui",
+      "rating": 5,
+      "title": "Outstanding Experience in Asia",
+      "content": "An outstanding experience with our partner SEKIM in Asia. The team demonstrated deep knowledge of the local market, exceptional professionalism, and a client-focused approach. Their strategic insights helped us make confident, well-informed decisions. Highly recommended for anyone looking to grow in the region!",
+      "date": "2024-09-10T09:45:00.000Z",
+      "verified": true,
+      "company": "SEKIM International",
+      "companyDomain": "sekiminternational.com",
+      "companyLogo": "/logos/sekim.png"
     }
   ]
 }

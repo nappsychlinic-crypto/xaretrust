@@ -1,54 +1,62 @@
 "use client";
 
-import { motion } from "framer-motion";
-import Image from "next/image";
-
-const companies = [
-    { id: 1, name: "EGA Master", url: "https://upload.wikimedia.org/wikipedia/en/b/be/EGA_Master_logo.svg" },
-    { id: 2, name: "Panther", url: "https://www.mixcoindustry.com/cdn/shop/collections/logo_05d133b3-7824-466e-b1c4-69a9debe10c3_1024x.jpg?v=1583117557" },
-    { id: 3, name: "Irudek", url: "https://i.ytimg.com/vi/zIzyaX8Rybs/hqdefault.jpg" },
-    { id: 4, name: "ACE Safety", url: "https://cdn.store-assets.com/s/369545/f/4923228.png?width=350&format=webp" },
-    { id: 5, name: "Bondflex", url: "https://static.wixstatic.com/media/257e98_ebe3fc401c644e52a1b8550bd5e71d3a~mv2.png/v1/fill/w_2500,h_1162,al_c/257e98_ebe3fc401c644e52a1b8550bd5e71d3a~mv2.png" },
-    { id: 6, name: "Eyevex", url: "https://eyevexonline.com/cdn/shop/files/shopify_eyevex_logo_1500x750.png?v=1692188998" },
-    { id: 7, name: "Eligere", url: "https://eligere.ai/wp-content/uploads/2021/08/eligere-logo.png" },
-    { id: 9, name: "Submer", url: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Submer_logo.png/1200px-Submer_logo.png" },
-    { id: 11, name: "Nabakem", url: "https://www.nabakem.com/images/common/logo.png" },
-    { id: 12, name: "Viridian", url: "https://viridian-nutrition.com/cdn/shop/files/header-logo.png?v=1674663394" },
-    { id: 13, name: "USA Group", url: "https://usagroup.es/wp-content/uploads/2023/12/apple-touch-icon.png" },
-    { id: 14, name: "Cypet", url: "https://cypet.eu/wp-content/uploads/2020/11/CYPET.png" }
-];
+import { Star } from "lucide-react";
+import Link from "next/link";
+import { Card, CardContent } from "@/components/ui/Card";
 
 export default function CompaniesCarousel() {
     return (
-        <div className="w-full overflow-hidden bg-background py-12">
-            <div className="container mx-auto px-4 mb-8 text-center">
-                <h2 className="text-2xl font-semibold text-muted-foreground uppercase tracking-widest">Verified Businesses</h2>
-            </div>
-            <div className="relative flex w-full overflow-hidden">
-                <div className="absolute left-0 top-0 z-10 h-full w-20 bg-gradient-to-r from-background to-transparent" />
-                <div className="absolute right-0 top-0 z-10 h-full w-20 bg-gradient-to-l from-background to-transparent" />
+        <div className="w-full bg-background py-16">
+            <div className="container mx-auto px-4">
+                <h2 className="text-2xl font-semibold text-center text-muted-foreground uppercase tracking-widest mb-12">
+                    Featured Business
+                </h2>
 
-                <motion.div
-                    className="flex shrink-0 gap-16 py-4 pr-16"
-                    animate={{
-                        x: ["0%", "-50%"],
-                    }}
-                    transition={{
-                        duration: 60,
-                        ease: "linear",
-                        repeat: Infinity,
-                    }}
-                >
-                    {[...companies, ...companies, ...companies, ...companies].map((company, index) => (
-                        <div key={`${company.id}-${index}`} className="flex h-20 w-40 shrink-0 items-center justify-center grayscale transition-all hover:grayscale-0 opacity-70 hover:opacity-100">
-                            <img
-                                src={company.url}
-                                alt={company.name}
-                                className="max-h-full max-w-full object-contain"
-                            />
-                        </div>
-                    ))}
-                </motion.div>
+                <div className="max-w-3xl mx-auto">
+                    <Link href="/review/sekiminternational.com" className="block">
+                        <Card className="bg-gradient-to-br from-primary/10 to-background border-2 border-primary/30 shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer">
+                            <CardContent className="p-8">
+                                <div className="flex flex-col md:flex-row items-center gap-8">
+                                    {/* Company Logo */}
+                                    <div className="flex-shrink-0">
+                                        <div className="w-32 h-32 bg-white rounded-lg shadow-md flex items-center justify-center p-4 border border-border">
+                                            <img
+                                                src="/logos/sekim.png"
+                                                alt="SEKIM International"
+                                                className="max-w-full max-h-full object-contain"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Company Info */}
+                                    <div className="flex-1 text-center md:text-left">
+                                        <h3 className="text-3xl font-bold text-foreground mb-2">
+                                            SEKIM International
+                                        </h3>
+
+                                        {/* Rating */}
+                                        <div className="flex items-center justify-center md:justify-start gap-3 mb-4">
+                                            <div className="flex text-yellow-500">
+                                                {[...Array(5)].map((_, i) => (
+                                                    <Star
+                                                        key={i}
+                                                        className="h-6 w-6 fill-current"
+                                                    />
+                                                ))}
+                                            </div>
+                                            <span className="text-2xl font-bold text-foreground">4.9/5</span>
+                                        </div>
+
+                                        {/* Description */}
+                                        <p className="text-muted-foreground text-lg leading-relaxed">
+                                            At SEKIM International, we help small and medium-sized enterprises (SMEs) and start-ups to achieve successful international expansion through proven strategies and hands-on execution.
+                                        </p>
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </Link>
+                </div>
             </div>
         </div>
     );

@@ -1,14 +1,10 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, Star, Landmark, Plane, Car, Armchair, Gem, Shirt, Cpu, Dumbbell, Dog, Zap, Home, Shield } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import homeData from "@/data/home.json";
-
-const iconMap: Record<string, any> = {
-    Landmark, Plane, Car, Armchair, Gem, Shirt, Cpu, Dumbbell, Dog, Zap, Home, Shield
-};
 
 export default function CategoriesCarousel() {
     const [startIndex, setStartIndex] = useState(0);
@@ -53,17 +49,22 @@ export default function CategoriesCarousel() {
                         style={{ width: `${(totalCategories / visibleCount) * 100}%` }}
                     >
                         {homeData.categories.map((cat, idx) => {
-                            const Icon = iconMap[cat.icon] || Star;
                             return (
                                 <div
                                     key={idx}
-                                    className="flex flex-col items-center justify-center p-6 bg-card border border-border rounded-lg hover:shadow-md transition-shadow cursor-pointer group h-32"
+                                    className="flex flex-col items-center justify-center p-6 bg-card border border-border rounded-lg hover:shadow-md transition-shadow cursor-pointer group h-40"
                                     style={{
                                         minWidth: `calc((100% - ${(totalCategories - 1) * 16}px) / ${totalCategories})`,
                                         flex: `0 0 calc((100% - ${(totalCategories - 1) * 16}px) / ${totalCategories})`
                                     }}
                                 >
-                                    <Icon className="h-8 w-8 mb-3 text-primary group-hover:scale-110 transition-transform" />
+                                    <div className="w-16 h-16 mb-3 rounded-lg overflow-hidden group-hover:scale-110 transition-transform">
+                                        <img
+                                            src={cat.image}
+                                            alt={cat.name}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
                                     <span className="font-medium text-sm text-center whitespace-nowrap">{cat.name}</span>
                                 </div>
                             );
@@ -85,10 +86,15 @@ export default function CategoriesCarousel() {
             {/* Mobile View - Horizontal Scroll */}
             <div className="md:hidden flex overflow-x-auto gap-4 pb-4 snap-x">
                 {homeData.categories.map((cat, idx) => {
-                    const Icon = iconMap[cat.icon] || Star;
                     return (
                         <div key={idx} className="flex-shrink-0 w-32 flex flex-col items-center p-4 bg-card border border-border rounded-lg snap-center">
-                            <Icon className="h-6 w-6 mb-2 text-primary" />
+                            <div className="w-12 h-12 mb-2 rounded-lg overflow-hidden">
+                                <img
+                                    src={cat.image}
+                                    alt={cat.name}
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
                             <span className="text-xs text-center">{cat.name}</span>
                         </div>
                     );
