@@ -14,7 +14,7 @@ const footerLinks = {
     ],
     legal: [
         { label: "Privacy Policy", href: "/privacy" },
-        { label: "Terms of Service", href: "/terms" },
+        // { label: "Terms of Service", href: "/terms" },
     ],
 };
 
@@ -28,7 +28,7 @@ export default function Footer() {
                             Xare<span className="text-white/90">Trust</span>
                         </Link>
                         <p className="text-white/80 text-sm mb-6">
-                            Helping businesses expand into international markets with trust and confidence.
+                            {/* Helping businesses expand into international markets with trust and confidence. */}
                         </p>
                         <div className="flex gap-4">
                             <Link href="#" className="text-white/80 hover:text-white transition-colors">
@@ -47,27 +47,29 @@ export default function Footer() {
                     </div>
 
                     <div>
-                        <h3 className="font-semibold text-white mb-4">Company</h3>
+                        {/* <h3 className="font-semibold text-white mb-4">Company</h3> */}
                         <ul className="space-y-2">
                             {footerLinks.company.map((link) => (
-                                <li key={link.label}>
-                                    <Link href={link.href} className="text-white/80 hover:text-white transition-colors text-sm">
-                                        {link.label}
-                                    </Link>
-                                </li>
+                                // <li key={link.label}>
+                                //     <Link href={link.href} className="text-white/80 hover:text-white transition-colors text-sm">
+                                //         {link.label}
+                                //     </Link>
+                                // </li>
+                                ""
                             ))}
                         </ul>
                     </div>
 
                     <div>
-                        <h3 className="font-semibold text-white mb-4">Resources</h3>
+                        {/* <h3 className="font-semibold text-white mb-4">Resources</h3> */}
                         <ul className="space-y-2">
                             {footerLinks.resources.map((link) => (
-                                <li key={link.label}>
-                                    <Link href={link.href} className="text-white/80 hover:text-white transition-colors text-sm">
-                                        {link.label}
-                                    </Link>
-                                </li>
+                                // <li key={link.label}>
+                                //     <Link href={link.href} className="text-white/80 hover:text-white transition-colors text-sm">
+                                //         {link.label}
+                                //     </Link>
+                                // </li>
+                                ""
                             ))}
                         </ul>
                     </div>

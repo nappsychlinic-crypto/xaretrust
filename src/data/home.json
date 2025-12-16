@@ -7,27 +7,27 @@
   "categories": [
     {
       "name": "Legal",
-      "image": "/legal.jpeg",
+      "image": "/legal1.jpeg",
       "slug": "legal"
     },
     {
       "name": "Brand",
-      "image": "/brand.jpeg",
+      "image": "/brand1.jpeg",
       "slug": "brand"
     },
     {
       "name": "Distributor",
-      "image": "/distributor.jpeg",
+      "image": "/distributor1.jpeg",
       "slug": "distributor"
     },
     {
       "name": "Consulting",
-      "image": "/consulting.jpeg",
+      "image": "/consulting1.jpeg",
       "slug": "consulting"
     },
     {
       "name": "IT Solutions",
-      "image": "/it.jpeg",
+      "image": "/it1.jpeg",
       "slug": "it-solutions"
     }
   ],

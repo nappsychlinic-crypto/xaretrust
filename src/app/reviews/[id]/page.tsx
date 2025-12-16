@@ -117,7 +117,7 @@ export default function ReviewPage() {
                 {/* Rating Breakdown */}
                 <Card className="bg-card border-border shadow-sm mt-6">
                     <CardContent className="p-6">
-                        <h3 className="text-lg font-bold mb-4">Rating Breakdown</h3>
+                        <h3 className="text-lg font-bold mb-4">Trust Score Breakdown</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {[
                                 { label: "Service Quality", key: "serviceQuality" },

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Star } from "lucide-react";
+import { API_ENDPOINTS } from "@/config/api";
 
 interface BreakdownItem {
     questionId: string;
@@ -30,7 +31,7 @@ export default function RatingBreakdown({ companyId }: RatingBreakdownProps) {
         async function fetchRatingData() {
             try {
                 const response = await fetch(
-                    `https://www.xaregrowth.com/api/review/userReviewDetails/${companyId}`
+                    API_ENDPOINTS.userReviewDetails(companyId)
                 );
                 const data = await response.json();
                 setRatingData(data);
@@ -62,20 +63,20 @@ export default function RatingBreakdown({ companyId }: RatingBreakdownProps) {
     }
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6">
             {ratingData.breakDownScore.breakdown.map((item) => (
                 <div key={item.questionId} className="space-y-1">
                     <div className="text-sm font-medium text-muted-foreground">
                         {item.question}
                     </div>
                     <div className="flex items-center gap-3">
-                        <div className="flex text-green-500">
+                        <div className="flex text-[#1e40af]">
                             {[...Array(5)].map((_, i) => (
                                 <Star
                                     key={i}
                                     className={`h-4 w-4 ${i < Math.round(item.breakdownScore)
-                                            ? "fill-current"
-                                            : "text-gray-300"
+                                        ? "fill-current"
+                                        : "text-gray-300"
                                         }`}
                                 />
                             ))}

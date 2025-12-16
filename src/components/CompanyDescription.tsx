@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { API_ENDPOINTS } from "@/config/api";
 
 interface CompanyDescriptionProps {
     companyId: string;
@@ -14,7 +15,7 @@ export default function CompanyDescription({ companyId }: CompanyDescriptionProp
         async function fetchDescription() {
             try {
                 const response = await fetch(
-                    `https://www.xaregrowth.com/api/review/companyDescription/${companyId}`
+                    API_ENDPOINTS.companyDescription(companyId)
                 );
                 const data = await response.json();
                 setDescription(data.companyDescriptionMarkup || "");

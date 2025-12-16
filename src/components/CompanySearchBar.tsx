@@ -3,11 +3,18 @@
 import { useState, useRef, useEffect } from "react";
 import { Search, Star } from "lucide-react";
 import Link from "next/link";
-import companies from "@/data/companies.json";
+import { API_ENDPOINTS } from "@/config/api";
+import type { Company } from "@/types/company";
+
+interface CompanyWithCount extends Company {
+    publicTestimonialCount: number;
+}
 
 export default function CompanySearchBar() {
     const [searchQuery, setSearchQuery] = useState("");
     const [isOpen, setIsOpen] = useState(false);
+    const [companies, setCompanies] = useState<CompanyWithCount[]>([]);
+    const [loading, setLoading] = useState(true);
     const searchRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -20,9 +27,36 @@ export default function CompanySearchBar() {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    const filteredCompanies = companies.filter((company) =>
-        company.name.toLowerCase().includes(searchQuery.toLowerCase())
-    ).slice(0, 8); // Limit to 8 results
+    useEffect(() => {
+        async function fetchCompanies() {
+            try {
+                const response = await fetch(API_ENDPOINTS.xareview());
+                const data: Company[] = await response.json();
+                // Filter out companies with zero public testimonials
+                const companiesWithReviews = data
+                    .map(company => ({
+                        ...company,
+                        publicTestimonialCount: company.scoreBreakdown.remarks.filter(
+                            remark => remark.remarkPublic && remark.showAsTestimonial
+                        ).length
+                    }))
+                    .filter(company => company.publicTestimonialCount > 0);
+                setCompanies(companiesWithReviews);
+            } catch (error) {
+                console.error("Failed to fetch companies:", error);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchCompanies();
+    }, []);
+
+    const filteredCompanies = companies
+        .filter((company) =>
+            company.companyName.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+        .slice(0, 8); // Limit to 8 results
 
     const handleFocus = () => {
         setIsOpen(true);
@@ -58,33 +92,43 @@ export default function CompanySearchBar() {
                         </h3>
                     </div>
 
-                    {filteredCompanies.length > 0 ? (
+                    {loading ? (
+                        <div className="p-8 text-center text-muted-foreground">
+                            Loading companies...
+                        </div>
+                    ) : filteredCompanies.length > 0 ? (
                         <div className="py-2">
                             {filteredCompanies.map((company) => (
                                 <Link
-                                    key={company.id}
-                                    href={`/review/${company.domain}`}
+                                    key={company.companyId}
+                                    href={`/review/${company.companyId}`}
                                     onClick={() => setIsOpen(false)}
                                     className="flex items-center gap-4 px-4 py-3 hover:bg-muted/50 transition-colors"
                                 >
                                     <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center shrink-0 p-1 border border-border">
-                                        <img
-                                            src={company.logo}
-                                            alt={company.name}
-                                            className="w-full h-full object-contain"
-                                        />
+                                        {company.brandLogoUID ? (
+                                            <img
+                                                src={API_ENDPOINTS.document(company.brandLogoUID)}
+                                                alt={company.companyName}
+                                                className="w-full h-full object-contain"
+                                            />
+                                        ) : (
+                                            <div className="text-2xl font-bold text-primary">
+                                                {company.companyName.charAt(0)}
+                                            </div>
+                                        )}
                                     </div>
 
                                     <div className="flex-1 min-w-0">
                                         <div className="font-semibold text-foreground truncate text-left">
-                                            {company.name}
+                                            {company.companyName}
                                         </div>
                                         <div className="flex items-center gap-2 mt-1">
-                                            <div className="flex text-green-500">
+                                            <div className="flex text-[#1e40af]">
                                                 {[...Array(5)].map((_, i) => (
                                                     <Star
                                                         key={i}
-                                                        className={`h-3 w-3 ${i < Math.round(company.rating)
+                                                        className={`h-3 w-3 ${i < Math.round(company.score)
                                                             ? "fill-current"
                                                             : "text-gray-300"
                                                             }`}
@@ -92,10 +136,10 @@ export default function CompanySearchBar() {
                                                 ))}
                                             </div>
                                             <span className="text-sm font-semibold text-foreground">
-                                                {company.rating}
+                                                {company.score.toFixed(1)}
                                             </span>
                                             <span className="text-sm text-muted-foreground">
-                                                • {company.reviewCount} reviews
+                                                • {company.publicTestimonialCount} reviews
                                             </span>
                                         </div>
                                     </div>
@@ -104,7 +148,7 @@ export default function CompanySearchBar() {
                         </div>
                     ) : (
                         <div className="p-4 text-center text-muted-foreground">
-                            No companies found matching "{searchQuery}"
+                            {searchQuery ? `No companies found matching "${searchQuery}"` : "No companies available"}
                         </div>
                     )}
                 </div>

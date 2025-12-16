@@ -6,12 +6,11 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
     { label: "Home", path: "/" },
-    { label: "About Us", path: "/about-us" },
+    // { label: "About Us", path: "/about-us" },
     // { label: "Knowledge Centre", path: "/knowledge-centre" },
     // { label: "Solutions", path: "/solutions" },
     // { label: "Prices", path: "/pricing" },
@@ -56,10 +55,11 @@ export default function Navbar() {
                             {link.label}
                         </Link>
                     ))}
-                    <ThemeSwitcher />
-                    <Button variant="primary" size="sm">
-                        Login
-                    </Button>
+                    <a href="https://xaregrowth.com/?login=true" target="_blank" rel="noopener noreferrer">
+                        <Button type="button" variant="primary" size="sm">
+                            Login
+                        </Button>
+                    </a>
                 </nav>
 
                 {/* Mobile Toggle */}
@@ -94,9 +94,11 @@ export default function Navbar() {
                                     {link.label}
                                 </Link>
                             ))}
-                            <Button variant="primary" className="w-full">
-                                Login
-                            </Button>
+                            <a href="https://xaregrowth.com/?login=true" target="_blank" rel="noopener noreferrer" className="w-full">
+                                <Button type="button" variant="primary" className="w-full">
+                                    Login
+                                </Button>
+                            </a>
                         </div>
                     </motion.div>
                 )}

@@ -23,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="light">
       <body
         className={`${outfit.variable} antialiased bg-background text-foreground flex flex-col min-h-screen`}
       >
@@ -32,7 +32,7 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
-        <Toaster position="top-right" theme="system" />
+        <Toaster position="top-right" theme="light" />
       </body>
     </html>
   );

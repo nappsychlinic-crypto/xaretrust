@@ -1,5 +1,6 @@
+"use client";
+
 import { notFound } from "next/navigation";
-import companies from "@/data/companies.json";
 import { Star, ShieldCheck, MapPin, Globe, Mail, Phone, CheckCircle, ExternalLink, ThumbsUp, Filter, ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
@@ -9,30 +10,77 @@ import ReviewsSortSelector from "@/components/ReviewsSortSelector";
 import { ReviewActionButtons, SeeAllActivityButton } from "@/components/ReviewActions";
 import CompanyDescription from "@/components/CompanyDescription";
 import RatingBreakdown from "@/components/RatingBreakdown";
+import { useEffect, useState, use } from "react";
+import { API_ENDPOINTS } from "@/config/api";
+import type { Company } from "@/types/company";
 
-export default async function CompanyPage({
-    params,
-    searchParams
-}: {
-    params: Promise<{ domain: string }>,
-    searchParams: Promise<{ page?: string, pageSize?: string }>
-}) {
-    const { domain } = await params;
-    const { page, pageSize: pageSizeParam } = await searchParams;
+interface CompanyPageProps {
+    params: Promise<{ domain: string }>;
+    searchParams: Promise<{ page?: string; pageSize?: string }>;
+}
+
+export default function CompanyPage({ params, searchParams }: CompanyPageProps) {
+    // Unwrap promises
+    const { domain } = use(params);
+    const { page, pageSize: pageSizeParam } = use(searchParams);
+
+    const companyId = domain; // Using domain param as companyId
     const currentPage = Number(page) || 1;
     const pageSize = Number(pageSizeParam) || 5;
 
-    const company = companies.find((c) => c.domain === domain);
+    const [company, setCompany] = useState<Company | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchCompany() {
+            try {
+                const response = await fetch(API_ENDPOINTS.xareview());
+                const companies: Company[] = await response.json();
+                const foundCompany = companies.find((c) => c.companyId === companyId);
+
+                if (!foundCompany) {
+                    setCompany(null);
+                } else {
+                    setCompany(foundCompany);
+                }
+            } catch (error) {
+                console.error("Failed to fetch company:", error);
+                setCompany(null);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchCompany();
+    }, [companyId]);
+
+    if (loading) {
+        return (
+            <main className="min-h-screen bg-muted/10">
+                <div className="container mx-auto px-4 py-16">
+                    <div className="animate-pulse space-y-8">
+                        <div className="h-32 bg-muted rounded-lg"></div>
+                        <div className="h-64 bg-muted rounded-lg"></div>
+                    </div>
+                </div>
+            </main>
+        );
+    }
 
     if (!company) {
         notFound();
     }
 
-    const totalReviews = company.reviews.length;
+    // Get public reviews for display
+    const publicReviews = company.scoreBreakdown.remarks.filter(
+        (remark) => remark.remarkPublic && remark.showAsTestimonial
+    );
+
+    const totalReviews = publicReviews.length;
     const totalPages = Math.ceil(totalReviews / pageSize);
     const startIdx = (currentPage - 1) * pageSize;
     const endIdx = startIdx + pageSize;
-    const currentReviews = company.reviews.slice(startIdx, endIdx);
+    const currentReviews = publicReviews.slice(startIdx, endIdx);
 
     return (
         <main className="min-h-screen bg-muted/10">
@@ -40,46 +88,56 @@ export default async function CompanyPage({
             <div className="bg-background border-b border-border sticky top-16 z-30">
                 <div className="container mx-auto px-4 py-4">
                     <div className="text-sm text-muted-foreground mb-4">
-                        <Link href="/" className="hover:underline">Home</Link> &gt; <span className="text-foreground">{company.name}</span>
+                        <Link href="/" className="hover:underline">Home</Link> &gt; <span className="text-foreground">{company.companyName}</span>
                     </div>
 
                     <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
                         <div className="w-32 h-32 bg-white rounded-lg border-2 border-border p-2 shrink-0 shadow-sm">
-                            <img
-                                src={company.logo}
-                                alt={company.name}
-                                className="w-full h-full object-contain rounded"
-                            />
+                            {company.brandLogoUID ? (
+                                <img
+                                    src={API_ENDPOINTS.document(company.brandLogoUID)}
+                                    alt={company.companyName}
+                                    className="w-full h-full object-contain rounded"
+                                />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center text-5xl font-bold text-primary">
+                                    {company.companyName.charAt(0)}
+                                </div>
+                            )}
                         </div>
 
                         <div className="flex-1 text-center md:text-left">
-                            <h1 className="text-3xl md:text-4xl font-bold mb-2">{company.name}</h1>
+                            <h1 className="text-3xl md:text-4xl font-bold mb-2">{company.companyName}</h1>
                             <div className="flex items-center justify-center md:justify-start gap-2 mb-2">
                                 <span className="text-sm text-muted-foreground">Reviews</span>
-                                <span className="font-semibold">{company.reviewCount}</span>
+                                <span className="font-semibold">{totalReviews}</span>
                                 <span className="text-sm text-muted-foreground">•</span>
-                                <span className="text-sm text-muted-foreground">Excellent</span>
+                                <span className="text-sm text-muted-foreground">
+                                    {company.score >= 4.5 ? "Excellent" : company.score >= 3.5 ? "Great" : company.score >= 2.5 ? "Good" : "Average"}
+                                </span>
                             </div>
 
                             <div className="flex items-center justify-center md:justify-start gap-3 mb-4">
-                                <div className="flex bg-green-500 p-1 rounded">
+                                <div className="flex text-[#1e40af]">
                                     {[...Array(5)].map((_, i) => (
-                                        <Star key={i} className={`h-6 w-6 fill-white text-white ${i < Math.round(company.rating) ? "opacity-100" : "opacity-30"}`} />
+                                        <Star key={i} className={`h-6 w-6 ${i < Math.round(company.score) ? "fill-current" : "text-gray-300"}`} />
                                     ))}
                                 </div>
-                                <span className="text-2xl font-bold">{company.rating}</span>
+                                <span className="text-2xl font-bold">Trust Score {company.score.toFixed(1)}</span>
                             </div>
                         </div>
 
                         <div className="shrink-0">
-                            <a
-                                href={company.website}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-background border-2 border-primary text-primary rounded-full hover:bg-primary/5 transition-colors font-semibold"
-                            >
-                                Visit Website <ExternalLink className="h-4 w-4" />
-                            </a>
+                            {company.brandWebsite && (
+                                <a
+                                    href={company.brandWebsite.startsWith('http') ? company.brandWebsite : `https://${company.brandWebsite}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-background border-2 border-primary text-primary rounded-full hover:bg-primary/5 transition-colors font-semibold"
+                                >
+                                    Visit Website <ExternalLink className="h-4 w-4" />
+                                </a>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -89,25 +147,69 @@ export default async function CompanyPage({
             <div className="container mx-auto px-4 py-8">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-                    {/* Left Column: Reviews (8 cols) */}
-                    <div className="lg:col-span-8 space-y-6">
+                    {/* Left Column: Sidebar (3 cols) */}
+                    <div className="lg:col-span-3 space-y-6">
                         {/* Rating Breakdown Section */}
                         <Card className="bg-card border-border shadow-sm">
                             <CardHeader className="pb-3 border-b border-border/50">
-                                <CardTitle className="text-lg">Rating Breakdown</CardTitle>
+                                <CardTitle className="text-lg">Trust Score Breakdown</CardTitle>
                             </CardHeader>
                             <CardContent className="pt-6">
-                                <RatingBreakdown companyId={company.companyId || "80ec2cbc-295e-4f4d-ba55-dd0064451a43"} />
+                                <RatingBreakdown companyId={company.companyId} />
                             </CardContent>
                         </Card>
 
+                        <Card className="bg-card border-border shadow-sm">
+                            <CardHeader className="pb-3 border-b border-border/50">
+                                <CardTitle className="text-lg">About {company.companyName}</CardTitle>
+                            </CardHeader>
+                            <CardContent className="pt-4">
+                                <div className="space-y-4 text-sm">
+                                    {company.emailAddress && (
+                                        <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
+                                            <Mail className="h-5 w-5 text-muted-foreground" />
+                                            <a href={`mailto:${company.emailAddress}`} className="hover:underline font-medium truncate">{company.emailAddress}</a>
+                                        </div>
+                                    )}
+                                    {company.brandContactNumber && (
+                                        <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
+                                            <Phone className="h-5 w-5 text-muted-foreground" />
+                                            <span className="font-medium">{company.brandContactNumber}</span>
+                                        </div>
+                                    )}
+                                    {company.brandCountry && (
+                                        <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
+                                            <MapPin className="h-5 w-5 text-muted-foreground" />
+                                            <span className="font-medium">{company.brandCountry}</span>
+                                        </div>
+                                    )}
+                                    {company.brandWebsite && (
+                                        <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
+                                            <Globe className="h-5 w-5 text-muted-foreground" />
+                                            <a
+                                                href={company.brandWebsite.startsWith('http') ? company.brandWebsite : `https://${company.brandWebsite}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="hover:underline font-medium truncate"
+                                            >
+                                                {company.brandWebsite}
+                                            </a>
+                                        </div>
+                                    )}
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+
+                    {/* Right Column: Reviews (9 cols) */}
+                    <div className="lg:col-span-9 space-y-6">
                         {/* Company Description Section */}
                         <Card className="bg-card border-border shadow-sm">
                             <CardHeader className="pb-3 border-b border-border/50">
                                 <CardTitle className="text-lg">Company Description</CardTitle>
                             </CardHeader>
                             <CardContent className="pt-6">
-                                <CompanyDescription companyId={company.companyId || "80ec2cbc-295e-4f4d-ba55-dd0064451a43"} />
+                                <CompanyDescription companyId={company.companyId} />
                             </CardContent>
                         </Card>
 
@@ -125,22 +227,20 @@ export default async function CompanyPage({
                         </Card>
 
                         {currentReviews.map((review) => (
-                            <Card key={review.id} className="bg-card border-border shadow-sm hover:shadow-md transition-shadow">
+                            <Card key={review.uniqueId} className="bg-card border-border shadow-sm hover:shadow-md transition-shadow">
                                 <CardContent className="p-6">
                                     <div className="flex flex-col md:flex-row gap-6">
                                         {/* User Info Column */}
                                         <div className="md:w-48 shrink-0 flex md:flex-col items-center md:items-start gap-3 border-b md:border-b-0 md:border-r border-border pb-4 md:pb-0 md:pr-4">
                                             <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-foreground font-bold">
-                                                {review.user.charAt(0)}
+                                                {review.contact ? review.contact.firstName.charAt(0) : "A"}
                                             </div>
                                             <div className="text-sm">
-                                                <div className="font-semibold">{review.user}</div>
+                                                <div className="font-semibold">
+                                                    {review.contact ? `${review.contact.firstName} ${review.contact.lastName}` : "Anonymous"}
+                                                </div>
                                                 <div className="text-muted-foreground text-xs flex items-center gap-1">
-                                                    {review.verified ? (
-                                                        <>
-                                                            <CheckCircle className="h-3 w-3 text-green-500" /> Verified
-                                                        </>
-                                                    ) : "Reviewer"}
+                                                    <CheckCircle className="h-3 w-3 text-green-500" /> Verified
                                                 </div>
                                             </div>
                                         </div>
@@ -148,17 +248,16 @@ export default async function CompanyPage({
                                         {/* Review Content Column */}
                                         <div className="flex-1">
                                             <div className="flex items-center justify-between mb-3">
-                                                <div className="flex text-green-500">
+                                                <div className="flex text-[#1e40af]">
                                                     {[...Array(5)].map((_, i) => (
-                                                        <Star key={i} className={`h-5 w-5 ${i < review.rating ? "fill-current" : "text-gray-300"}`} />
+                                                        <Star key={i} className={`h-5 w-5 ${i < Math.round(company.score) ? "fill-current" : "text-gray-300"}`} />
                                                     ))}
                                                 </div>
                                                 <span className="text-sm text-muted-foreground">{new Date(review.date).toLocaleDateString()}</span>
                                             </div>
 
-                                            <h3 className="font-bold text-lg mb-2">{review.title}</h3>
                                             <p className="text-muted-foreground leading-relaxed mb-4 text-sm">
-                                                {review.content}
+                                                {review.remark}
                                             </p>
 
                                             <div className="text-xs text-muted-foreground mb-4">
@@ -167,11 +266,6 @@ export default async function CompanyPage({
 
                                             <div className="flex items-center gap-4 pt-4 border-t border-border/50">
                                                 <ReviewActionButtons />
-                                                <Link href={`/reviews/${review.id}`}>
-                                                    <button className="flex items-center gap-2 px-4 py-2 rounded-full border border-border hover:bg-muted transition-colors text-sm font-medium cursor-pointer ml-auto">
-                                                        <Eye className="h-4 w-4" /> View
-                                                    </button>
-                                                </Link>
                                             </div>
                                         </div>
                                     </div>
@@ -183,7 +277,7 @@ export default async function CompanyPage({
                         {totalPages > 1 && (
                             <div className="flex justify-center items-center gap-2 mt-8">
                                 <Link
-                                    href={`/review/${domain}?page=${currentPage - 1}&pageSize=${pageSize}`}
+                                    href={`/review/${companyId}?page=${currentPage - 1}&pageSize=${pageSize}`}
                                     className={`p-2 rounded-full border border-border hover:bg-muted transition-colors ${currentPage <= 1 ? "pointer-events-none opacity-50" : ""}`}
                                 >
                                     <ChevronLeft className="h-5 w-5" />
@@ -195,7 +289,7 @@ export default async function CompanyPage({
                                         return (
                                             <Link
                                                 key={p}
-                                                href={`/review/${domain}?page=${p}&pageSize=${pageSize}`}
+                                                href={`/review/${companyId}?page=${p}&pageSize=${pageSize}`}
                                                 className={`w-10 h-10 flex items-center justify-center rounded-full border border-border transition-colors ${currentPage === p ? "bg-primary text-primary-foreground border-primary" : "hover:bg-muted"}`}
                                             >
                                                 {p}
@@ -208,76 +302,21 @@ export default async function CompanyPage({
                                 })}
 
                                 <Link
-                                    href={`/review/${domain}?page=${currentPage + 1}&pageSize=${pageSize}`}
+                                    href={`/review/${companyId}?page=${currentPage + 1}&pageSize=${pageSize}`}
                                     className={`p-2 rounded-full border border-border hover:bg-muted transition-colors ${currentPage >= totalPages ? "pointer-events-none opacity-50" : ""}`}
                                 >
                                     <ChevronRight className="h-5 w-5" />
                                 </Link>
                             </div>
                         )}
-                    </div>
 
-                    {/* Right Column: Sidebar (4 cols) */}
-                    <div className="lg:col-span-4 space-y-6">
-                        <Card className="bg-card border-border shadow-sm">
-                            <CardHeader className="pb-3 border-b border-border/50">
-                                <CardTitle className="text-lg">About {company.name}</CardTitle>
-                            </CardHeader>
-                            <CardContent className="pt-4">
-                                <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
-                                    {company.about}
-                                </p>
-
-                                <div className="space-y-4 text-sm">
-                                    <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
-                                        <Mail className="h-5 w-5 text-muted-foreground" />
-                                        <a href={`mailto:${company.email}`} className="hover:underline font-medium truncate">{company.email}</a>
-                                    </div>
-                                    <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
-                                        <Phone className="h-5 w-5 text-muted-foreground" />
-                                        <span className="font-medium">{company.phone}</span>
-                                    </div>
-                                    <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
-                                        <MapPin className="h-5 w-5 text-muted-foreground" />
-                                        <span className="font-medium">{company.location}</span>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-
-                        <Card className="bg-card border-border shadow-sm">
-                            <CardHeader className="pb-3 border-b border-border/50">
-                                <CardTitle className="flex items-center gap-2 text-lg">
-                                    <ShieldCheck className="h-5 w-5 text-green-500" />
-                                    Company Activity
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="pt-4">
-                                <div className="space-y-4 text-sm text-muted-foreground">
-                                    <div className="flex items-start gap-3">
-                                        <div className="mt-0.5 bg-primary/10 p-1 rounded-full">
-                                            <CheckCircle className="h-4 w-4 text-primary" />
-                                        </div>
-                                        <div>
-                                            <div className="font-medium text-foreground">Claimed Profile</div>
-                                            <div className="text-xs">This company has claimed their profile.</div>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-start gap-3">
-                                        <div className="mt-0.5 bg-primary/10 p-1 rounded-full">
-                                            <CheckCircle className="h-4 w-4 text-primary" />
-                                        </div>
-                                        <div>
-                                            <div className="font-medium text-foreground">Active</div>
-                                            <div className="text-xs">Replied to 98% of negative reviews within 24 hours.</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="w-full mt-6">
-                                    <SeeAllActivityButton />
-                                </div>
-                            </CardContent>
-                        </Card>
+                        {totalReviews === 0 && (
+                            <Card className="bg-card border-border shadow-sm">
+                                <CardContent className="p-12 text-center">
+                                    <p className="text-muted-foreground">No public reviews available yet.</p>
+                                </CardContent>
+                            </Card>
+                        )}
                     </div>
 
                 </div>
