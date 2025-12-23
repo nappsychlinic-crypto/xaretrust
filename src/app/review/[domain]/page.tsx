@@ -1,7 +1,7 @@
 "use client";
 
 import { notFound } from "next/navigation";
-import { Star, ShieldCheck, MapPin, Globe, Mail, Phone, CheckCircle, ExternalLink, ThumbsUp, Filter, ChevronLeft, ChevronRight, Eye } from "lucide-react";
+import { Star, ShieldCheck, MapPin, Globe, Mail, Phone, CheckCircle, ExternalLink, ThumbsUp, Filter, ChevronLeft, ChevronRight, Eye, Briefcase } from "lucide-react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
@@ -11,6 +11,7 @@ import { ReviewActionButtons, SeeAllActivityButton } from "@/components/ReviewAc
 import CompanyDescription from "@/components/CompanyDescription";
 import RatingBreakdown from "@/components/RatingBreakdown";
 import { useEffect, useState, use } from "react";
+
 import { API_ENDPOINTS } from "@/config/api";
 import type { Company } from "@/types/company";
 
@@ -20,6 +21,15 @@ interface CompanyPageProps {
 }
 
 export default function CompanyPage({ params, searchParams }: CompanyPageProps) {
+
+    const categories = [
+        { id: 1, name: "HR/Accounting/Legal services", image: "/legal1.jpeg", server_company_category: "HR_ACCOUNTING_LEGAL" },
+        { id: 2, name: "Manufacturer/Brand Owner", image: "/brand1.jpeg", server_company_category: "MANUFACTURER_BRAND_OWNER" },
+        { id: 3, name: "Importer/Distributor", image: "/distributor1.jpeg", server_company_category: "IMPORTER_DISTRIBUTOR" },
+        { id: 4, name: "Consulting/Advisory", image: "/consulting1.jpeg", server_company_category: "CONSULTING_ADVISORY" },
+        { id: 5, name: "Tech Solution Provider", image: "/it1.jpeg", server_company_category: "TECH_SOLUTION_PROVIDER" },
+    ];
+
     // Unwrap promises
     const { domain } = use(params);
     const { page, pageSize: pageSizeParam } = use(searchParams);
@@ -76,8 +86,10 @@ export default function CompanyPage({ params, searchParams }: CompanyPageProps) 
         (remark) => remark.remarkPublic && remark.showAsTestimonial
     );
 
-    const totalReviews = publicReviews.length;
-    const totalPages = Math.ceil(totalReviews / pageSize);
+    const displayedReviewsCount = publicReviews.length;
+    const totalReviewCount = company.scoreBreakdown.remarks.length;
+
+    const totalPages = Math.ceil(displayedReviewsCount / pageSize);
     const startIdx = (currentPage - 1) * pageSize;
     const endIdx = startIdx + pageSize;
     const currentReviews = publicReviews.slice(startIdx, endIdx);
@@ -110,7 +122,7 @@ export default function CompanyPage({ params, searchParams }: CompanyPageProps) 
                             <h1 className="text-3xl md:text-4xl font-bold mb-2">{company.companyName}</h1>
                             <div className="flex items-center justify-center md:justify-start gap-2 mb-2">
                                 <span className="text-sm text-muted-foreground">Reviews</span>
-                                <span className="font-semibold">{totalReviews}</span>
+                                <span className="font-semibold">{totalReviewCount}</span>
                                 <span className="text-sm text-muted-foreground">•</span>
                                 <span className="text-sm text-muted-foreground">
                                     {company.score >= 4.5 ? "Excellent" : company.score >= 3.5 ? "Great" : company.score >= 2.5 ? "Good" : "Average"}
@@ -165,6 +177,26 @@ export default function CompanyPage({ params, searchParams }: CompanyPageProps) 
                             </CardHeader>
                             <CardContent className="pt-4">
                                 <div className="space-y-4 text-sm">
+                                    {(company.server_company_category || company.companyCategory || (company as any).companyType) && (
+                                        <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
+                                            <Briefcase className="h-5 w-5 text-muted-foreground" />
+                                            <span className="font-medium">
+                                                {(() => {
+                                                    const categoryKey = company.server_company_category || (company as any).companyType || company.companyCategory;
+                                                    const matchedCategory = categories.find(c => c.server_company_category === categoryKey);
+
+                                                    if (matchedCategory) {
+                                                        return matchedCategory.name;
+                                                    }
+
+                                                    return (categoryKey || '')
+                                                        .split('_')
+                                                        .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                                                        .join(' ');
+                                                })()}
+                                            </span>
+                                        </div>
+                                    )}
                                     {company.emailAddress && (
                                         <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
                                             <Mail className="h-5 w-5 text-muted-foreground" />
@@ -310,7 +342,7 @@ export default function CompanyPage({ params, searchParams }: CompanyPageProps) 
                             </div>
                         )}
 
-                        {totalReviews === 0 && (
+                        {displayedReviewsCount === 0 && (
                             <Card className="bg-card border-border shadow-sm">
                                 <CardContent className="p-12 text-center">
                                     <p className="text-muted-foreground">No public reviews available yet.</p>

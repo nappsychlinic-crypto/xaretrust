@@ -8,7 +8,7 @@ import { API_ENDPOINTS } from "@/config/api";
 import type { Company } from "@/types/company";
 
 interface CompanyWithCount extends Company {
-    publicTestimonialCount: number;
+    totalReviewCount: number;
 }
 
 export default function CompaniesCarousel() {
@@ -20,15 +20,13 @@ export default function CompaniesCarousel() {
             try {
                 const response = await fetch(API_ENDPOINTS.xareview());
                 const data: Company[] = await response.json();
-                // Filter companies with public testimonials and sort by score
+                // Filter companies with reviews and sort by score
                 const companiesWithReviews = data
                     .map(company => ({
                         ...company,
-                        publicTestimonialCount: company.scoreBreakdown.remarks.filter(
-                            remark => remark.remarkPublic && remark.showAsTestimonial
-                        ).length
+                        totalReviewCount: company.scoreBreakdown.remarks.length
                     }))
-                    .filter(company => company.publicTestimonialCount > 0)
+                    .filter(company => company.totalReviewCount > 0)
                     .sort((a, b) => b.score - a.score);
                 setCompanies(companiesWithReviews);
             } catch (error) {
@@ -118,7 +116,7 @@ export default function CompaniesCarousel() {
                                                     {company.score.toFixed(1)}
                                                 </span>
                                                 <span className="text-xs text-muted-foreground">
-                                                    ({company.publicTestimonialCount})
+                                                    ({company.totalReviewCount})
                                                 </span>
                                             </div>
                                         </div>

@@ -44,6 +44,7 @@ export interface Company {
     brandWebsite: string | null;
     brandContactNumber: string | null;
     brandCountry: string | null;
+    server_company_category?: string | null;
     score: number;
     scoreBreakdown: CompanyScoreBreakdown;
 }

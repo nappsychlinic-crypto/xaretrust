@@ -7,7 +7,7 @@ import { API_ENDPOINTS } from "@/config/api";
 import type { Company } from "@/types/company";
 
 interface CompanyWithCount extends Company {
-    publicTestimonialCount: number;
+    totalReviewCount: number;
 }
 
 export default function CompanySearchBar() {
@@ -32,15 +32,13 @@ export default function CompanySearchBar() {
             try {
                 const response = await fetch(API_ENDPOINTS.xareview());
                 const data: Company[] = await response.json();
-                // Filter out companies with zero public testimonials
+                // Filter out companies with zero reviews
                 const companiesWithReviews = data
                     .map(company => ({
                         ...company,
-                        publicTestimonialCount: company.scoreBreakdown.remarks.filter(
-                            remark => remark.remarkPublic && remark.showAsTestimonial
-                        ).length
+                        totalReviewCount: company.scoreBreakdown.remarks.length
                     }))
-                    .filter(company => company.publicTestimonialCount > 0);
+                    .filter(company => company.totalReviewCount > 0);
                 setCompanies(companiesWithReviews);
             } catch (error) {
                 console.error("Failed to fetch companies:", error);
@@ -139,7 +137,7 @@ export default function CompanySearchBar() {
                                                 {company.score.toFixed(1)}
                                             </span>
                                             <span className="text-sm text-muted-foreground">
-                                                • {company.publicTestimonialCount} reviews
+                                                • {company.totalReviewCount} reviews
                                             </span>
                                         </div>
                                     </div>

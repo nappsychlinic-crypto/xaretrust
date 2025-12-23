@@ -8,28 +8,34 @@
     {
       "name": "Legal",
       "image": "/legal1.jpeg",
-      "slug": "legal"
+      "slug": "legal",
+      "server_company_category": "HR_ACCOUNTING_LEGAL"
     },
     {
       "name": "Brand",
       "image": "/brand1.jpeg",
-      "slug": "brand"
+      "slug": "brand",
+      "server_company_category": "MANUFACTURER_BRAND"
     },
     {
       "name": "Distributor",
       "image": "/distributor1.jpeg",
-      "slug": "distributor"
+      "slug": "distributor",
+      "server_company_category": "IMPORTER_DISTRIBUTOR"
     },
     {
       "name": "Consulting",
       "image": "/consulting1.jpeg",
-      "slug": "consulting"
+      "slug": "consulting",
+      "server_company_category": "CONSULTING_ADVISORY"
     },
     {
       "name": "IT Solutions",
       "image": "/it1.jpeg",
-      "slug": "it-solutions"
+      "slug": "it-solutions",
+      "server_company_category": "TECH_SOLUTION_PROVIDER"
     }
+
   ],
   "recentReviews": [
     {
