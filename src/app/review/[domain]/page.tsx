@@ -135,7 +135,7 @@ export default function CompanyPage({ params, searchParams }: CompanyPageProps) 
                                         <Star key={i} className={`h-6 w-6 ${i < Math.round(company.score) ? "fill-current" : "text-gray-300"}`} />
                                     ))}
                                 </div>
-                                <span className="text-2xl font-bold">Trust Score {company.score.toFixed(1)}</span>
+                                <span className="text-2xl font-bold">Trust Score {company.score.toFixed(1)}/5</span>
                             </div>
                         </div>
 
